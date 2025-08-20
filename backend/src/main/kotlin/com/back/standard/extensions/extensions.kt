@@ -23,3 +23,15 @@ fun String.base64Decode(): String {
 fun <T : Any> T?.getOrThrow(): T {
     return this ?: throw NoSuchElementException()
 }
+
+fun String.toCamelCase() =
+    this
+        .split("_")
+        .mapIndexed { index, word ->
+            if (index == 0)
+                word.lowercase()
+            else
+                word.lowercase().replaceFirstChar {
+                    it.uppercase()
+                }
+        }.joinToString("")

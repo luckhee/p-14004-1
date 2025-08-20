@@ -5,6 +5,7 @@ plugins {
     kotlin("jvm") version "1.9.25"
     kotlin("plugin.spring") version "1.9.25"
     kotlin("plugin.jpa") version "1.9.25"
+    kotlin("kapt") version "1.9.25"
 }
 
 group = "com"
@@ -45,6 +46,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
+
+    implementation("io.github.openfeign.querydsl:querydsl-jpa:7.0")
+    kapt("io.github.openfeign.querydsl:querydsl-apt:7.0:jpa")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")

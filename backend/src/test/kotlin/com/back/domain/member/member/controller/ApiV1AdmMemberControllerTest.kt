@@ -33,33 +33,33 @@ class ApiV1AdmMemberControllerTest {
     fun t1() {
         val resultActions = mvc
             .perform(
-                get("/api/v1/adm/members")
+                get("/api/v1/adm/members?kw=유저&page=1&pageSize=5")
             )
             .andDo(print())
 
-        val members = memberService.findAll()
+        val members = memberService.findPagedByKw("유저",1,5).content
 
         resultActions
             .andExpect(handler().handlerType(ApiV1AdmMemberController::class.java))
             .andExpect(handler().methodName("getItems"))
             .andExpect(status().isOk)
-            .andExpect(jsonPath("$.length()").value(members.size))
+            .andExpect(jsonPath("$.content.length()").value(members.size))
 
         for (i in members.indices) {
             val member = members[i]
             resultActions
-                .andExpect(jsonPath("$[$i].id").value(member.id))
+                .andExpect(jsonPath("$.content[$i].id").value(member.id))
                 .andExpect(
-                    jsonPath("$[$i].createDate")
+                    jsonPath("$.content[$i].createDate")
                         .value(Matchers.startsWith(member.createDate.toString().take(20)))
                 )
                 .andExpect(
-                    jsonPath("$[$i].modifyDate")
+                    jsonPath("$.content[$i].modifyDate")
                         .value(Matchers.startsWith(member.modifyDate.toString().take(20)))
                 )
-                .andExpect(jsonPath("$[$i].name").value(member.name))
-                .andExpect(jsonPath("$[$i].username").value(member.username))
-                .andExpect(jsonPath("$[$i].isAdmin").value(member.isAdmin))
+                .andExpect(jsonPath("$.content[$i].name").value(member.name))
+                .andExpect(jsonPath("$.content[$i].username").value(member.username))
+                .andExpect(jsonPath("$.content[$i].isAdmin").value(member.isAdmin))
         }
     }
 

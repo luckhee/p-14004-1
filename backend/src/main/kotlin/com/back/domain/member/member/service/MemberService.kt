@@ -1,9 +1,14 @@
 package com.back.domain.member.member.service
 
+
 import com.back.domain.member.member.entity.Member
 import com.back.domain.member.member.repository.MemberRepository
 import com.back.global.exception.ServiceException
 import com.back.global.rsData.RsData
+import com.back.standard.dto.MemberSearchKeywordType
+import com.back.standard.dto.SortKeyWord
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -63,4 +68,25 @@ class MemberService(
     fun modify(member: Member, nickname: String, profileImgUrl: String?) {
         member.modify(nickname, profileImgUrl)
     }
+
+    fun findPaged(page:Int,pageSize : Int) = memberRepository.findAll(
+        PageRequest.of(page -1 , pageSize, Sort.by(Sort.Direction.DESC, "id"))
+    )
+
+    fun findPagedByKw(kw: String, page: Int, pageSize: Int) = memberRepository.findQPagedByKw(
+        kw,
+        PageRequest.of(page - 1, pageSize, Sort.by(Sort.Direction.DESC, "id"))
+    )
+
+    fun findPagedByKwAndKwType(kw: String, kwType : MemberSearchKeywordType ,  sort : SortKeyWord, page: Int, pageSize: Int) = memberRepository.findQPagedByKwAndKwType(
+        kw,
+        kwType,
+        PageRequest.of(
+            page - 1,
+            pageSize,
+            Sort.by(if (sort.isAsc) Sort.Direction.ASC else Sort.Direction.DESC, sort.property)
+    ))
+
+
+
 }
